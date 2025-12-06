@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VGB Admin - Reviews</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <header>
+    <div class="logo">
+      <img src="images/VGB_Logo.png" alt="Logo" class="logo-img">
+      VIDEO GAME BULLETIN
+    </div>
+    <nav>
+      <a href="admin_index.html">DASHBOARD</a>
+      <a href="admin_calendar.html">CALENDAR</a>
+      <a href="admin_reviews.html" class="active">REVIEWS</a>
+    </nav>
+    <div class="auth">
+      <span class="welcome">Admin: VGBAdmin1</span>
+      <button class="logout">Log out</button>
+    </div>
+  </header>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3>Admin Tools</h3>
+      <button>Review Submissions</button>
+      <button>Approve / Reject</button>
+      <button>Delete Inappropriate Content</button>
+      <button>View User Reports</button>
+    </aside>
+
+    <main>
+      <section class="reviews">
+        <h2>Review Management</h2>
+        <p>Oversee all submitted reviews and ensure content quality.</p>
+
+        <div class="admin-review-panel">
+          <p>No pending reviews at the moment.</p>
+          <!-- Later, you can dynamically insert review cards here -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Project VAUYL</p>
+  </footer>
+</body>
+</html>
+<script src="script.js"></script>

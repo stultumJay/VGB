@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Game Bulletin - Calendar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="images/VGB_Logo.png" alt="Logo" class="logo-img">
+      VIDEO GAME BULLETIN
+    </div>
+    <nav>
+      <a href="user_index.html">HOME</a>
+      <a href="user_calendar.html" class="active">CALENDAR</a>
+      <a href="user_reviews.html">REVIEWS</a>
+    </nav>
+    <div class="auth">
+      <span class="welcome">Welcome, VGB User!</span>
+      <button class="profile">Profile</button>
+      <button class="logout">Log out</button>
+    </div>
+  </header>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3>My Schedule</h3>
+      <button>Upcoming Releases</button>
+      <button>Watched Games</button>
+      <button>Reminders</button>
+    </aside>
+
+    <main>
+      <section class="calendar">
+        <h2 id="month-year"></h2>
+        <div class="controls">
+          <button onclick="prevMonth()">&#9664; Prev</button>
+          <button onclick="nextMonth()">Next &#9654;</button>
+        </div>
+        <div class="calendar-grid" id="calendar"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Project VAUYL</p>
+  </footer>
+
+  <script>
+    let today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+
+    function generateCalendar(year, month) {
+      const calendar = document.getElementById("calendar");
+      const monthYear = document.getElementById("month-year");
+      calendar.innerHTML = "";
+
+      const monthName = new Date(year, month).toLocaleString("default", { month: "long" });
+      monthYear.textContent = `${monthName} ${year}`;
+
+      const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      days.forEach(day => {
+        let cell = document.createElement("div");
+        cell.className = "day header";
+        cell.textContent = day;
+        calendar.appendChild(cell);
+      });
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        let cell = document.createElement("div");
+        cell.className = "day empty";
+        calendar.appendChild(cell);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        let cell = document.createElement("div");
+        cell.className = "day";
+        cell.textContent = d;
+        if (d === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+          cell.classList.add("today");
+        }
+        calendar.appendChild(cell);
+      }
+    }
+
+    function prevMonth() {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      generateCalendar(currentYear, currentMonth);
+    }
+
+    function nextMonth() {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      generateCalendar(currentYear, currentMonth);
+    }
+
+    generateCalendar(currentYear, currentMonth);
+  </script>
+</body>
+</html>
+<script src="script.js"></script>
