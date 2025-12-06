@@ -1,0 +1,1001 @@
+Repository: earlallenuy/video-game-bulletin
+Files analyzed: 12
+
+Estimated tokens: 6.4k
+
+Directory structure:
+└── earlallenuy-video-game-bulletin/
+    ├── README.md
+    ├── admin_calendar.html
+    ├── admin_index.html
+    ├── admin_reviews.html
+    ├── calendar.html
+    ├── index.html
+    ├── reviews.html
+    ├── script.js
+    ├── style.css
+    ├── user_calendar.html
+    ├── user_index.html
+    ├── user_reviews.html
+    └── images/
+
+
+================================================
+FILE: README.md
+================================================
+# Video-Game-Bulletin
+
+
+================================================
+FILE: admin_calendar.html
+================================================
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VGB Admin - Calendar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="images/VGB_Logo.png" alt="Logo" class="logo-img">
+      VIDEO GAME BULLETIN
+    </div>
+    <nav>
+      <a href="admin_index.html">DASHBOARD</a>
+      <a href="admin_calendar.html" class="active">CALENDAR</a>
+      <a href="admin_reviews.html">REVIEWS</a>
+    </nav>
+    <div class="auth">
+      <span class="welcome">Admin: VGBAdmin1</span>
+      <button class="logout">Log out</button>
+    </div>
+  </header>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3>Admin Tools</h3>
+      <button>Schedule Releases</button>
+      <button>Edit Calendar</button>
+      <button>Manage Events</button>
+    </aside>
+
+    <main>
+      <section class="calendar">
+        <h2 id="month-year"></h2>
+        <div class="controls">
+          <button onclick="prevMonth()">&#9664; Prev</button>
+          <button onclick="nextMonth()">Next &#9654;</button>
+        </div>
+        <div class="calendar-grid" id="calendar"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Project VAUYL</p>
+  </footer>
+
+  <script>
+    // same script as before
+    let today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+
+    function generateCalendar(year, month) {
+      const calendar = document.getElementById("calendar");
+      const monthYear = document.getElementById("month-year");
+      calendar.innerHTML = "";
+
+      const monthName = new Date(year, month).toLocaleString("default", { month: "long" });
+      monthYear.textContent = `${monthName} ${year}`;
+
+      const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      days.forEach(day => {
+        let cell = document.createElement("div");
+        cell.className = "day header";
+        cell.textContent = day;
+        calendar.appendChild(cell);
+      });
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        let cell = document.createElement("div");
+        cell.className = "day empty";
+        calendar.appendChild(cell);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        let cell = document.createElement("div");
+        cell.className = "day";
+        cell.textContent = d;
+        if (d === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+          cell.classList.add("today");
+        }
+        calendar.appendChild(cell);
+      }
+    }
+
+    function prevMonth() {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      generateCalendar(currentYear, currentMonth);
+    }
+
+    function nextMonth() {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      generateCalendar(currentYear, currentMonth);
+    }
+
+    generateCalendar(currentYear, currentMonth);
+  </script>
+</body>
+</html>
+<script src="script.js"></script>
+
+
+================================================
+FILE: admin_index.html
+================================================
+<header>
+  <div class="logo">
+    <img src="images/VGB_Logo.png" alt="Logo" class="logo-img">
+    VIDEO GAME BULLETIN
+  </div>
+  <link rel="stylesheet" href="style.css">
+  <nav>
+    <a href="admin_index.html" class="active">DASHBOARD</a>
+    <a href="admin_calendar.html">CALENDAR</a>
+    <a href="admin_reviews.html">REVIEWS</a>
+  </nav>
+  <div class="auth">
+    <span class="welcome">Admin: VGBAdmin1</span>
+    <button class="logout">Log out</button>
+  </div>
+</header>
+
+<div class="content-wrapper">
+  <aside class="sidebar">
+    <h3>Admin Controls</h3>
+    <button>Manage Users</button>
+    <button>Approve Reviews</button>
+    <button>Edit Game Listings</button>
+    <button>View Reports</button>
+  </aside>
+
+  <main>
+    <section class="featured">
+      <h2>Admin Dashboard</h2>
+      <p>Welcome back, Admin. Manage content and users here.</p>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <p>&copy; 2025 Project VAUYL</p>
+</footer>
+<script src="script.js"></script>
+
+
+================================================
+FILE: admin_reviews.html
+================================================
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VGB Admin - Reviews</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <header>
+    <div class="logo">
+      <img src="images/VGB_Logo.png" alt="Logo" class="logo-img">
+      VIDEO GAME BULLETIN
+    </div>
+    <nav>
+      <a href="admin_index.html">DASHBOARD</a>
+      <a href="admin_calendar.html">CALENDAR</a>
+      <a href="admin_reviews.html" class="active">REVIEWS</a>
+    </nav>
+    <div class="auth">
+      <span class="welcome">Admin: VGBAdmin1</span>
+      <button class="logout">Log out</button>
+    </div>
+  </header>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3>Admin Tools</h3>
+      <button>Review Submissions</button>
+      <button>Approve / Reject</button>
+      <button>Delete Inappropriate Content</button>
+      <button>View User Reports</button>
+    </aside>
+
+    <main>
+      <section class="reviews">
+        <h2>Review Management</h2>
+        <p>Oversee all submitted reviews and ensure content quality.</p>
+
+        <div class="admin-review-panel">
+          <p>No pending reviews at the moment.</p>
+          <!-- Later, you can dynamically insert review cards here -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Project VAUYL</p>
+  </footer>
+</body>
+</html>
+<script src="script.js"></script>
+
+
+================================================
+FILE: calendar.html
+================================================
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Game Bulletin - Calendar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <header>
+      <div class="logo">
+    <img src="images\VGB_Logo.png" alt="Logo" class="logo-img">
+    VIDEO GAME BULLETIN
+  </div>
+    <nav>
+      <a href="index.html">HOME</a>
+      <a href="calendar.html" class="active">CALENDAR</a>
+      <a href="reviews.html">REVIEWS</a>
+    </nav>
+    <div class="auth">
+      <button class="login">Log in</button>
+      <button class="signup">Create an account!</button>
+    </div>
+  </header>
+
+  <main>
+  <section class="calendar">
+    <h2 id="month-year"></h2>
+    <div class="controls">
+      <button onclick="prevMonth()">&#9664; Prev</button>
+      <button onclick="nextMonth()">Next &#9654;</button>
+    </div>
+    <div class="calendar-grid" id="calendar"></div>
+  </section>
+</main>
+
+<script>
+let today = new Date();
+let currentMonth = today.getMonth();
+let currentYear = today.getFullYear();
+
+function generateCalendar(year, month) {
+  const calendar = document.getElementById("calendar");
+  const monthYear = document.getElementById("month-year");
+  calendar.innerHTML = "";
+
+  const monthName = new Date(year, month).toLocaleString("default", { month: "long" });
+  monthYear.textContent = `${monthName} ${year}`;
+
+  // Day headers
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  days.forEach(day => {
+    let cell = document.createElement("div");
+    cell.className = "day header";
+    cell.textContent = day;
+    calendar.appendChild(cell);
+  });
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  // Empty cells before 1st
+  for (let i = 0; i < firstDay; i++) {
+    let cell = document.createElement("div");
+    cell.className = "day empty";
+    calendar.appendChild(cell);
+  }
+
+  // Days of the month
+  for (let d = 1; d <= daysInMonth; d++) {
+    let cell = document.createElement("div");
+    cell.className = "day";
+    cell.textContent = d;
+
+    // Highlight today
+    if (d === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+      cell.classList.add("today");
+    }
+
+    calendar.appendChild(cell);
+  }
+}
+
+function prevMonth() {
+  currentMonth--;
+  if (currentMonth < 0) {
+    currentMonth = 11;
+    currentYear--;
+  }
+  generateCalendar(currentYear, currentMonth);
+}
+
+function nextMonth() {
+  currentMonth++;
+  if (currentMonth > 11) {
+    currentMonth = 0;
+    currentYear++;
+  }
+  generateCalendar(currentYear, currentMonth);
+}
+
+// Initial load
+generateCalendar(currentYear, currentMonth);
+</script>
+
+  <footer>
+    <p>&copy; 2025 Video Game Bulletin</p>
+  </footer>
+</body>
+</html>
+<script src="script.js"></script>
+
+
+================================================
+FILE: index.html
+================================================
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Game Bulletin - Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+  <div class="logo">
+    <img src="images\VGB_Logo.png" alt="Logo" class="logo-img">
+    VIDEO GAME BULLETIN
+  </div>
+  <nav>
+    <a href="index.html" class="active">HOME</a>
+    <a href="calendar.html">CALENDAR</a>
+    <a href="reviews.html">REVIEWS</a>
+  </nav>
+  <div class="auth">
+    <button class="login">Log in</button>
+    <button class="signup">Create an account!</button>
+  </div>
+</header>
+
+  <!-- Content Wrapper -->
+<div class="content-wrapper">
+  <!-- Quick Access Tabs -->
+  <aside class="sidebar">
+    <h3>Quick Access Tabs</h3>
+    <button>Popular Games</button>
+    <button>New Releases</button>
+    <button>Top Rated</button>
+  </aside>
+
+  <!-- Featured Games -->
+  <main>
+    <section class="featured">
+      <h2>Featured Games</h2>
+      <div class="game-grid">
+        <div class="game">INSERT GAME PORTRAIT HERE</div>
+        <div class="game">INSERT GAME PORTRAIT HERE</div>
+        <div class="game">INSERT GAME PORTRAIT HERE</div>
+        <div class="game">INSERT GAME PORTRAIT HERE</div>
+        <div class="game">INSERT GAME PORTRAIT HERE</div>
+        <div class="game">INSERT GAME PORTRAIT HERE</div>
+      </div>
+      <p class="tagline">Your one stop for gaming information is here!</p>
+    </section>
+  </main>
+</div>
+
+
+  <footer>
+    <p>&copy; 2025 Project VAUYL</p>
+  </footer>
+</body>
+</html>
+<script src="script.js"></script>
+
+
+================================================
+FILE: reviews.html
+================================================
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Game Bulletin - Reviews</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <header>
+      <div class="logo">
+    <img src="images\VGB_Logo.png" alt="Logo" class="logo-img">
+    VIDEO GAME BULLETIN
+  </div>
+    <nav>
+      <a href="index.html">HOME</a>
+      <a href="calendar.html">CALENDAR</a>
+      <a href="reviews.html" class="active">REVIEWS</a>
+    </nav>
+    <div class="auth">
+      <button class="login">Log in</button>
+      <button class="signup">Create an account!</button>
+    </div>
+  </header>
+
+  <!-- Reviews Content -->
+  <main>
+    <section class="reviews">
+      <h2>Game Reviews</h2>
+      <p>Coming soon...</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Video Game Bulletin</p>
+  </footer>
+</body>
+</html>
+<script src="script.js"></script>
+
+
+
+================================================
+FILE: script.js
+================================================
+// Placeholder for future interactivity
+console.log("Video Game Bulletin loaded");
+
+document.addEventListener("DOMContentLoaded", () => {
+  const role = localStorage.getItem("vgbRole") || "guest"; // Default role
+
+  // Buttons
+  const loginBtn = document.querySelector(".login");
+  const signupBtn = document.querySelector(".signup");
+  const logoutBtn = document.querySelector(".logout");
+
+  /* =========================
+     Login & Signup Simulation
+     ========================= */
+  if (loginBtn) {
+    loginBtn.addEventListener("click", () => {
+      // For demo, ask which role to simulate
+      const choice = prompt("Log in as:\n1. Registered User\n2. Admin", "1");
+
+      if (choice === "2") {
+        localStorage.setItem("vgbRole", "admin");
+        alert("Logged in as Admin.");
+        redirectPage("admin");
+      } else {
+        localStorage.setItem("vgbRole", "user");
+        alert("Logged in as User.");
+        redirectPage("user");
+      }
+    });
+  }
+
+  if (signupBtn) {
+    signupBtn.addEventListener("click", () => {
+      localStorage.setItem("vgbRole", "user");
+      alert("Account created! Logged in as User.");
+      redirectPage("user");
+    });
+  }
+
+  /* =========================
+     Logout
+     ========================= */
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.setItem("vgbRole", "guest");
+      alert("You have logged out.");
+      redirectPage("guest");
+    });
+  }
+
+  /* =========================
+     Role-Based Redirect Logic
+     ========================= */
+  const currentFile = window.location.pathname.split("/").pop();
+
+  function redirectPage(role) {
+    if (currentFile.includes("index") || currentFile === "") {
+      window.location.href = role === "admin"
+        ? "admin_index.html"
+        : role === "user"
+        ? "user_index.html"
+        : "index.html";
+    } else if (currentFile.includes("calendar")) {
+      window.location.href = role === "admin"
+        ? "admin_calendar.html"
+        : role === "user"
+        ? "user_calendar.html"
+        : "calendar.html";
+    } else if (currentFile.includes("reviews")) {
+      window.location.href = role === "admin"
+        ? "admin_reviews.html"
+        : role === "user"
+        ? "user_reviews.html"
+        : "reviews.html";
+    } else {
+      window.location.href = "index.html";
+    }
+  }
+
+  /* =========================
+     Auto-Redirect Protection
+     ========================= */
+  // Prevent unauthorized access
+  if (role === "guest" && (currentFile.startsWith("user_") || currentFile.startsWith("admin_"))) {
+    alert("Access denied. Please log in first.");
+    window.location.href = "index.html";
+  } else if (role === "user" && currentFile.startsWith("admin_")) {
+    alert("Admins only.");
+    window.location.href = "user_index.html";
+  }
+});
+
+
+================================================
+FILE: style.css
+================================================
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: #111;
+  color: #eee;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* Header */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #333;
+  padding: 10px 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #00ff00;
+}
+
+.logo-img {
+  width: 50px;   /* adjust size */
+  height: 50px;  /* keep square */
+  margin-left: 10px; /* space between text and logo */
+}
+
+nav a {
+  color: #fff;
+  margin: 0 10px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a.active {
+  color: #00ff00;
+  border-bottom: 2px solid #00ff00;
+}
+
+.auth button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.auth .login {
+  background: #444;
+  color: #fff;
+}
+
+.auth .signup {
+  background: #0044cc;
+  color: #fff;
+}
+
+/* Sidebar (only visible on Home for now) */
+.sidebar {
+  background: #444;
+  color: #fff;
+  padding: 15px;
+  width: 200px;
+  float: left;
+}
+
+.sidebar button {
+  display: block;
+  margin: 10px 0;
+  width: 100%;
+  background: #555;
+  border: none;
+  padding: 8px;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Featured Games */
+main {
+  margin-left: 220px;
+  padding: 20px;
+  flex: 1; /* pushes footer down */
+}
+
+.featured .game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.featured .game {
+  background: #666;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9em;
+  text-align: center;
+  color: #fff;
+}
+
+.tagline {
+  margin-top: 20px;
+  font-style: italic;
+  text-align: center;
+  color: #ccc;
+}
+
+/* Calendar */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.month {
+  background: #ddd;
+  color: #000;
+  padding: 15px;
+  text-align: center;
+  border-radius: 5px;
+}
+
+/* Reviews */
+.reviews {
+  text-align: center;
+  margin-top: 50px;
+}
+
+/* Footer */
+footer {
+  background: #333;
+  text-align: center;
+  padding: 10px;
+  margin-top: 20px;
+  background: #333;
+  text-align: center;
+  margin-top: auto; /* forces it to bottom */
+}
+
+.calendar {
+  max-width: 700px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.controls {
+  margin: 10px 0;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.day {
+  border: 1px solid #444;
+  padding: 10px;
+  min-height: 60px;
+}
+
+.header {
+  font-weight: bold;
+  background: #333;
+}
+
+.today {
+  background: #00ff00;
+  color: #000;
+  font-weight: bold;
+}
+
+.empty {
+  background: #222;
+}
+
+
+
+================================================
+FILE: user_calendar.html
+================================================
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Game Bulletin - Calendar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="images/VGB_Logo.png" alt="Logo" class="logo-img">
+      VIDEO GAME BULLETIN
+    </div>
+    <nav>
+      <a href="user_index.html">HOME</a>
+      <a href="user_calendar.html" class="active">CALENDAR</a>
+      <a href="user_reviews.html">REVIEWS</a>
+    </nav>
+    <div class="auth">
+      <span class="welcome">Welcome, VGB User!</span>
+      <button class="profile">Profile</button>
+      <button class="logout">Log out</button>
+    </div>
+  </header>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3>My Schedule</h3>
+      <button>Upcoming Releases</button>
+      <button>Watched Games</button>
+      <button>Reminders</button>
+    </aside>
+
+    <main>
+      <section class="calendar">
+        <h2 id="month-year"></h2>
+        <div class="controls">
+          <button onclick="prevMonth()">&#9664; Prev</button>
+          <button onclick="nextMonth()">Next &#9654;</button>
+        </div>
+        <div class="calendar-grid" id="calendar"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Project VAUYL</p>
+  </footer>
+
+  <script>
+    let today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+
+    function generateCalendar(year, month) {
+      const calendar = document.getElementById("calendar");
+      const monthYear = document.getElementById("month-year");
+      calendar.innerHTML = "";
+
+      const monthName = new Date(year, month).toLocaleString("default", { month: "long" });
+      monthYear.textContent = `${monthName} ${year}`;
+
+      const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      days.forEach(day => {
+        let cell = document.createElement("div");
+        cell.className = "day header";
+        cell.textContent = day;
+        calendar.appendChild(cell);
+      });
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        let cell = document.createElement("div");
+        cell.className = "day empty";
+        calendar.appendChild(cell);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        let cell = document.createElement("div");
+        cell.className = "day";
+        cell.textContent = d;
+        if (d === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+          cell.classList.add("today");
+        }
+        calendar.appendChild(cell);
+      }
+    }
+
+    function prevMonth() {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      generateCalendar(currentYear, currentMonth);
+    }
+
+    function nextMonth() {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      generateCalendar(currentYear, currentMonth);
+    }
+
+    generateCalendar(currentYear, currentMonth);
+  </script>
+</body>
+</html>
+<script src="script.js"></script>
+
+
+================================================
+FILE: user_index.html
+================================================
+<header>
+  <div class="logo">
+    <img src="images/VGB_Logo.png" alt="Logo" class="logo-img">
+    VIDEO GAME BULLETIN
+  </div>
+  <link rel="stylesheet" href="style.css">
+  <nav>
+    <a href="user_index.html" class="active">HOME</a>
+    <a href="user_calendar.html">CALENDAR</a>
+    <a href="user_reviews.html">REVIEWS</a>
+  </nav>
+  <div class="auth">
+    <span class="welcome">Welcome, VGB User!</span>
+    <button class="profile">Profile</button>
+    <button class="logout">Log out</button>
+  </div>
+</header>
+
+<div class="content-wrapper">
+  <aside class="sidebar">
+    <h3>User Tools</h3>
+    <button>My Favorites</button>
+    <button>My Reviews</button>
+    <button>Account Settings</button>
+  </aside>
+
+  <main>
+    <section class="featured">
+      <h2>Recommended Games for You</h2>
+      <div class="game-grid">
+        <div class="game">INSERT GAME PORTRAIT HERE</div>
+        <div class="game">INSERT GAME PORTRAIT HERE</div>
+      </div>
+      <p class="tagline">Enjoy your personalized gaming feed!</p>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <p>&copy; 2025 Project VAUYL</p>
+</footer>
+<script src="script.js"></script>
+
+
+================================================
+FILE: user_reviews.html
+================================================
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Game Bulletin - Reviews</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <header>
+    <div class="logo">
+      <img src="images/VGB_Logo.png" alt="Logo" class="logo-img">
+      VIDEO GAME BULLETIN
+    </div>
+    <nav>
+      <a href="user_index.html">HOME</a>
+      <a href="user_calendar.html">CALENDAR</a>
+      <a href="user_reviews.html" class="active">REVIEWS</a>
+    </nav>
+    <div class="auth">
+      <span class="welcome">Welcome, VGB User!</span>
+      <button class="profile">Profile</button>
+      <button class="logout">Log out</button>
+    </div>
+  </header>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3>Review Tools</h3>
+      <button>My Reviews</button>
+      <button>Write a Review</button>
+      <button>Saved Games</button>
+    </aside>
+
+    <main>
+      <section class="reviews">
+        <h2>Game Reviews</h2>
+        <p>Share your thoughts on the latest releases!</p>
+
+        <div class="review-box">
+          <h3>Write a Review</h3>
+          <textarea placeholder="Type your review here..." rows="5"></textarea><br>
+          <button>Submit Review</button>
+        </div>
+
+        <div class="existing-reviews">
+          <h3>Community Reviews</h3>
+          <p>Coming soon...</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Project VAUYL</p>
+  </footer>
+</body>
+</html>
+<script src="script.js"></script>
+
+
