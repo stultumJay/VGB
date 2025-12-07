@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Game Bulletin - Reviews</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="images/VGB_Logo.png" alt="Logo" class="logo-img">
+      VIDEO GAME BULLETIN
+    </div>
+    <nav>
+      <a href="index.html">HOME</a>
+      <a href="calendar.html">CALENDAR</a>
+      <a href="reviews.html" class="active">REVIEWS</a>
+    </nav>
+    <div class="auth">
+      <button class="login" id="loginBtn">Log in</button>
+      <button class="signup" id="signupBtn">Create an account!</button>
+    </div>
+  </header>
+
+  <main style="max-width: 1200px; margin: 40px auto; padding: 20px;">
+    <section class="reviews">
+      <h2>Community Reviews</h2>
+      <p>Browse reviews and ratings from the gaming community</p>
+      
+      <div id="all-reviews-container" style="margin-top: 40px;">
+        <p class="loading">Loading reviews...</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Login</h2>
+      <form id="loginForm">
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit" class="btn-primary">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Signup Modal -->
+  <div id="signupModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Create Account</h2>
+      <form id="signupForm">
+        <input type="text" id="signupUsername" placeholder="Username" required>
+        <input type="email" id="signupEmail" placeholder="Email" required>
+        <input type="password" id="signupPassword" placeholder="Password" required>
+        <button type="submit" class="btn-primary">Create Account</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Video Game Bulletin</p>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
