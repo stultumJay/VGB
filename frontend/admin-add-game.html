@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Game - VGB Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .admin-form-container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #1a1a1a;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 255, 0, 0.2);
+    }
+    
+    .admin-form-container h2 {
+      color: #00ff00;
+      margin-bottom: 30px;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    .form-group label {
+      display: block;
+      color: #00ff00;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      background: #2d2d2d;
+      border: 1px solid #444;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 14px;
+    }
+    
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #00ff00;
+      box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+    }
+    
+    .image-upload-area {
+      border: 2px dashed #444;
+      padding: 30px;
+      text-align: center;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .image-upload-area:hover {
+      border-color: #00ff00;
+      background: rgba(0, 255, 0, 0.05);
+    }
+    
+    .image-upload-area.dragover {
+      border-color: #00ff00;
+      background: rgba(0, 255, 0, 0.1);
+    }
+    
+    .image-preview {
+      max-width: 100%;
+      max-height: 300px;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    
+    .btn-submit {
+      flex: 1;
+      padding: 15px;
+      background: #00ff00;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+    
+    .btn-submit:hover {
+      background: #00cc00;
+      transform: scale(1.02);
+    }
+    
+    .btn-cancel {
+      flex: 1;
+      padding: 15px;
+      background: #444;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    
+    .btn-cancel:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="images/VGB_Logo.png" alt="Logo" class="logo-img">
+      VIDEO GAME BULLETIN
+    </div>
+    <nav>
+      <a href="admin_index.html">DASHBOARD</a>
+      <a href="admin_calendar.html">CALENDAR</a>
+      <a href="admin_reviews.html">REVIEWS</a>
+    </nav>
+    <div class="auth">
+      <span class="welcome">Admin</span>
+      <button class="logout">Log out</button>
+    </div>
+  </header>
+
+  <div class="admin-form-container">
+    <h2>Add New Game</h2>
+    
+    <form id="addGameForm">
+      <div class="form-group">
+        <label for="gameId">Game ID *</label>
+        <input type="text" id="gameId" required placeholder="e.g., game_001">
+      </div>
+      
+      <div class="form-group">
+        <label for="title">Title *</label>
+        <input type="text" id="title" required placeholder="Enter game title">
+      </div>
+      
+      <div class="form-group">
+        <label for="description">Description *</label>
+        <textarea id="description" required placeholder="Enter game description"></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="platform">Platform *</label>
+        <input type="text" id="platform" required placeholder="e.g., PC, PS5, Xbox Series X">
+      </div>
+      
+      <div class="form-group">
+        <label for="genre">Genre *</label>
+        <input type="text" id="genre" required placeholder="e.g., Action, RPG, Strategy">
+      </div>
+      
+      <div class="form-group">
+        <label for="releaseDate">Release Date *</label>
+        <input type="date" id="releaseDate" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Status *</label>
+        <select id="status" required>
+          <option value="">Select status</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="released">Released</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>Game Cover Image (Max 1MB, JPG/PNG)</label>
+        <div class="image-upload-area" id="imageUploadArea">
+          <p>Click to upload or drag and drop image here</p>
+          <input type="file" id="imageInput" accept="image/*" style="display: none;">
+        </div>
+        <img id="imagePreview" class="image-preview" style="display: none;">
+      </div>
+      
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" onclick="history.back()">Cancel</button>
+        <button type="submit" class="btn-submit">Add Game</button>
+      </div>
+    </form>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Project VAUYL</p>
+  </footer>
+
+  <script type="module">
+    import { gameAPI } from './js/services/api.js';
+    import { convertToBase64, validateImage } from './js/utils/imageHandler.js';
+    import { showMessage, showError, showLoading } from './js/utils/helpers.js';
+
+    let imageBase64 = '';
+
+    // Image upload handling
+    const uploadArea = document.getElementById('imageUploadArea');
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+
+    uploadArea.addEventListener('click', () => imageInput.click());
+
+    imageInput.addEventListener('change', handleImageSelect);
+
+    // Drag and drop
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file) handleImageFile(file);
+    });
+
+    async function handleImageSelect(e) {
+      const file = e.target.files[0];
+      if (file) handleImageFile(file);
+    }
+
+    async function handleImageFile(file) {
+      const validation = validateImage(file);
+      
+      if (!validation.valid) {
+        showError(validation.errors.join(', '));
+        return;
+      }
+
+      try {
+        imageBase64 = await convertToBase64(file);
+        imagePreview.src = imageBase64;
+        imagePreview.style.display = 'block';
+        uploadArea.innerHTML = '<p>✓ Image uploaded. Click to change.</p>';
+        showMessage('Image uploaded successfully');
+      } catch (error) {
+        showError('Failed to upload image: ' + error.message);
+      }
+    }
+
+    // Form submission
+    document.getElementById('addGameForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const gameData = {
+        gameId: document.getElementById('gameId').value,
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value,
+        platform: document.getElementById('platform').value,
+        genre: document.getElementById('genre').value,
+        releaseDate: document.getElementById('releaseDate').value,
+        upcoming: document.getElementById('status').value === 'upcoming',
+        released: document.getElementById('status').value === 'released',
+        imageBase64: imageBase64
+      };
+
+      try {
+        showLoading(true);
+        await gameAPI.create(gameData);
+        showLoading(false);
+        showMessage('Game added successfully!');
+        
+        setTimeout(() => {
+          window.location.href = 'admin_index.html';
+        }, 1500);
+      } catch (error) {
+        showLoading(false);
+        showError('Failed to add game: ' + error.message);
+      }
+    });
+  </script>
+</body>
+</html>

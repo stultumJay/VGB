@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Details - Video Game Bulletin</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .game-detail-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    
+    .game-detail-header {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    
+    .game-detail-image {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 255, 0, 0.2);
+    }
+    
+    .game-detail-info h1 {
+      color: #00ff00;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+    
+    .game-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .game-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .game-meta-label {
+      color: #00ff00;
+      font-weight: bold;
+      min-width: 120px;
+    }
+    
+    .game-description {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .favorite-btn {
+      padding: 12px 30px;
+      background: #00ff00;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+    
+    .favorite-btn:hover {
+      background: #00cc00;
+      transform: scale(1.05);
+    }
+    
+    .favorite-btn.favorited {
+      background: #ff9900;
+    }
+    
+    .reviews-section {
+      margin-top: 60px;
+    }
+    
+    .reviews-section h2 {
+      color: #00ff00;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="images/VGB_Logo.png" alt="Logo" class="logo-img">
+      VIDEO GAME BULLETIN
+    </div>
+    <nav>
+      <a href="index.html">HOME</a>
+      <a href="calendar.html">CALENDAR</a>
+      <a href="reviews.html">REVIEWS</a>
+    </nav>
+    <div class="auth">
+      <button class="login" id="loginBtn">Log in</button>
+      <button class="signup" id="signupBtn">Create an account!</button>
+    </div>
+  </header>
+
+  <div class="game-detail-container">
+    <div id="game-content">
+      <p class="loading">Loading game details...</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Project VAUYL</p>
+  </footer>
+
+  <script type="module">
+    import { gameAPI, favoriteAPI } from './js/services/api.js';
+    import { createReviewForm, displayReviews } from './js/components/reviewForm.js';
+    import { getCurrentUserData, isAuthenticated } from './js/services/auth.js';
+    import { showMessage, showError, formatDate, createStarRating } from './js/utils/helpers.js';
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const gameId = urlParams.get('id');
+
+    if (!gameId) {
+      document.getElementById('game-content').innerHTML = '<p>Game not found</p>';
+    } else {
+      loadGameDetails();
+    }
+
+    async function loadGameDetails() {
+      try {
+        const data = await gameAPI.getById(gameId);
+        const game = data.game;
+        const reviews = data.reviews || [];
+
+        const userData = getCurrentUserData();
+        const userId = userData?.userId;
+
+        // Check if favorited
+        let isFavorited = false;
+        if (userId) {
+          try {
+            const favStatus = await favoriteAPI.check(userId, gameId);
+            isFavorited = favStatus.isFavorited;
+          } catch (error) {
+            console.log('Not favorited');
+          }
+        }
+
+        document.getElementById('game-content').innerHTML = `
+          <div class="game-detail-header">
+            <img src="${game.imageBase64 || 'images/placeholder.png'}" 
+                 alt="${game.title}" 
+                 class="game-detail-image"
+                 onerror="this.src='images/placeholder.png'">
+            
+            <div class="game-detail-info">
+              <h1>${game.title}</h1>
+              
+              <div class="game-meta">
+                <div class="game-meta-item">
+                  <span class="game-meta-label">Platform:</span>
+                  <span>${game.platform}</span>
+                </div>
+                <div class="game-meta-item">
+                  <span class="game-meta-label">Genre:</span>
+                  <span>${game.genre}</span>
+                </div>
+                <div class="game-meta-item">
+                  <span class="game-meta-label">Release Date:</span>
+                  <span>${formatDate(game.releaseDate)}</span>
+                </div>
+                <div class="game-meta-item">
+                  <span class="game-meta-label">Status:</span>
+                  <span class="${game.upcoming ? 'upcoming' : 'released'}">${game.upcoming ? 'Upcoming' : 'Released'}</span>
+                </div>
+                <div class="game-meta-item">
+                  <span class="game-meta-label">Rating:</span>
+                  <span>${createStarRating(game.averageRating || 0)} ${(game.averageRating || 0).toFixed(1)}/5 (${game.totalRatings || 0} reviews)</span>
+                </div>
+              </div>
+              
+              <div class="game-description">
+                <h3>Description</h3>
+                <p>${game.description}</p>
+              </div>
+              
+              ${userId ? `
+                <button class="favorite-btn ${isFavorited ? 'favorited' : ''}" id="favoriteBtn">
+                  ${isFavorited ? '❤️ Remove from Favorites' : '🤍 Add to Favorites'}
+                </button>
+              ` : '<p>Log in to add to favorites</p>'}
+            </div>
+          </div>
+          
+          <div class="reviews-section">
+            <h2>Reviews</h2>
+            ${userId ? '<div id="review-form-container"></div>' : '<p>Log in to write a review</p>'}
+            <div id="reviews-container"></div>
+          </div>
+        `;
+
+        // Display reviews
+        displayReviews(reviews, 'reviews-container');
+
+        // Create review form if logged in
+        if (userId) {
+          createReviewForm(gameId, 'review-form-container');
+          
+          // Setup favorite button
+          const favoriteBtn = document.getElementById('favoriteBtn');
+          if (favoriteBtn) {
+            favoriteBtn.addEventListener('click', async () => {
+              try {
+                if (isFavorited) {
+                  await favoriteAPI.remove(userId, gameId);
+                  showMessage('Removed from favorites');
+                  isFavorited = false;
+                  favoriteBtn.textContent = '🤍 Add to Favorites';
+                  favoriteBtn.classList.remove('favorited');
+                } else {
+                  await favoriteAPI.add(userId, gameId);
+                  showMessage('Added to favorites!');
+                  isFavorited = true;
+                  favoriteBtn.textContent = '❤️ Remove from Favorites';
+                  favoriteBtn.classList.add('favorited');
+                }
+              } catch (error) {
+                showError('Failed to update favorites: ' + error.message);
+              }
+            });
+          }
+        }
+      } catch (error) {
+        showError('Failed to load game details: ' + error.message);
+        document.getElementById('game-content').innerHTML = '<p>Failed to load game details</p>';
+      }
+    }
+  </script>
+</body>
+</html>
