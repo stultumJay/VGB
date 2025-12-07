@@ -1,8 +1,6 @@
 // Firebase Client SDK Configuration
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 
 // Your Firebase configuration
 // Replace with YOUR actual config from Firebase Console
